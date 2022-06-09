@@ -86,13 +86,20 @@ func main() {
 			filename := fmt.Sprintf(format, Name, Oid)
 
 			_, ok := openScripts[filename]
+			dir := fmt.Sprintf(dir_format, filename)
 
 			if ok {
 				fmt.Printf("Script [" + filename + "] is already present\n")
+
+				cmd := exec.Command("code", dir)
+
+				_, err := cmd.CombinedOutput()
+				if err != nil {
+					log.Fatalf("cmd.Run() failed with %s\n", err)
+				}
 			} else {
 				fmt.Printf("Script [" + filename + "] is opening\n")
 				openScripts[filename] = true
-				dir := fmt.Sprintf(dir_format, filename)
 
 				file, ok := os.Create(dir)
 				if ok != nil {
